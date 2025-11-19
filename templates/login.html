@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block content %}
+<section class="auth-page">
+  <div class="container auth-layout">
+
+    <div class="auth-intro">
+      <h1>Bienvenido a Refugio Andino</h1>
+      <p class="muted">
+        Un espacio cálido y acogedor para descansar.  
+        Inicia sesión para gestionar tus reservas o crea una cuenta nueva.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <h2>Iniciar sesión</h2>
+      <p class="muted">Ingresa con tu usuario y contraseña.</p>
+
+      <form method="post">
+        <div class="field">
+          <label>Usuario</label>
+          <input name="username" placeholder="Ej: admin" required>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button class="btn" style="width:100%; margin-top:0.7rem;">Ingresar</button>
+      </form>
+
+      <div class="muted small" style="margin-top:0.9rem; text-align:center;">
+        ¿No tienes cuenta?
+        <a class="link" href="{{ url_for('register') }}">Crear cuenta de usuario</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

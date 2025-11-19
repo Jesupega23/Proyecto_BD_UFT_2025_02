@@ -1,0 +1,63 @@
+{% extends "base.html" %}{% block content %}
+<section class="container page">
+  <header class="page-head">
+    <div>
+      <h1>Disponibilidad</h1>
+      <p class="muted">Consulta habitaciones libres en un rango de fechas.</p>
+    </div>
+  </header>
+
+  <div class="card-panel">
+    <form method="post" class="form-grid">
+      <div class="field">
+        <label>Desde</label>
+        <input type="date" name="desde" value="{{ desde }}">
+      </div>
+      <div class="field">
+        <label>Hasta</label>
+        <input type="date" name="hasta" value="{{ hasta }}">
+      </div>
+      <div class="actions">
+        <button class="btn">Consultar</button>
+      </div>
+    </form>
+  </div>
+
+  {% if libres is not none %}
+  <div class="card-panel">
+    <h2>Habitaciones libres</h2>
+
+    {% if libres|length == 0 %}
+      <div class="empty">
+        <div class="empty-emoji">📅</div>
+        <h3>Sin disponibilidad</h3>
+        <p class="muted">No encontramos habitaciones libres en el rango indicado.</p>
+      </div>
+    {% else %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Número</th>
+              <th>Tipo</th>
+              <th>Precio/noche</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for h in libres %}
+            <tr>
+              <td class="mono">{{ h.id_habitacion }}</td>
+              <td class="mono">{{ h.numero }}</td>
+              <td>{{ h.tipo }}</td>
+              <td class="mono">{{ h.precio_noche }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

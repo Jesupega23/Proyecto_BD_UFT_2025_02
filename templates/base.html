@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title or "Refugio Andino" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner container">
+      <div class="left">
+        <a class="brand" href="{{ url_for('home') }}">Refugio Andino</a>
+      </div>
+      <nav class="right">
+        {% if session.get('user_id') %}
+          {% if session.get('rol') == 'admin' %}
+            <a href="{{ url_for('clientes_listar') }}">Clientes</a>
+          {% endif %}
+          <a href="{{ url_for('reservas_listar') }}">Reservas</a>
+          <a href="{{ url_for('disponibilidad') }}">Disponibilidad</a>
+
+          <span class="user-label">
+            {{ session.get('username') }} ({{ session.get('rol') }})
+          </span>
+
+          <form method="post" action="{{ url_for('logout') }}" class="inline">
+            <button class="btn ghost">Salir</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('login') }}">Iniciar sesión</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="flash-message {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </section>
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      Semana 6 • Flask + SQLite
+    </div>
+  </footer>
+
+</body>
+</html>

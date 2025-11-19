@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block content %}
+
+<section class="hero">
+  <div class="container hero-inner">
+    <h1 class="hero-title">Sistema de Gestión Hotelera</h1>
+    <p class="hero-subtitle">Refugio Andino · Panel principal</p>
+
+    <div class="hero-actions">
+      {% if session.get('rol') == 'admin' %}
+        <a class="btn" href="{{ url_for('clientes_listar') }}">Gestionar clientes</a>
+      {% endif %}
+      <a class="btn outline" href="{{ url_for('reservas_listar') }}">Ver reservas</a>
+      <a class="btn ghost" href="{{ url_for('disponibilidad') }}">Buscar disponibilidad</a>
+    </div>
+  </div>
+</section>
+
+<section class="container cards">
+  {% if session.get('rol') == 'admin' %}
+  <article class="card">
+    <div class="card-icon">👤</div>
+    <h3>Clientes</h3>
+    <p>Registrar huéspedes, actualizar datos y eliminar registros sin reservas activas.</p>
+    <a class="link" href="{{ url_for('clientes_listar') }}">Ir a clientes →</a>
+  </article>
+  {% endif %}
+
+  <article class="card">
+    <div class="card-icon">🛎️</div>
+    <h3>Reservas</h3>
+    <p>Crear, confirmar, cancelar y reprogramar reservas con validación de choques.</p>
+    <a class="link" href="{{ url_for('reservas_listar') }}">Ir a reservas →</a>
+  </article>
+
+  <article class="card">
+    <div class="card-icon">🗓️</div>
+    <h3>Disponibilidad</h3>
+    <p>Consulta habitaciones libres por rango de fechas sin chocar con reservas activas.</p>
+    <a class="link" href="{{ url_for('disponibilidad') }}">Ver disponibilidad →</a>
+  </article>
+</section>
+
+{% endblock %}

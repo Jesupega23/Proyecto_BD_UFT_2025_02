@@ -1,0 +1,135 @@
+{% extends "base.html" %}{% block content %}
+<section class="container page">
+  <header class="page-head">
+    <div>
+      <h1>Reservas</h1>
+      <p class="muted">
+        Crear, confirmar/cancelar, reprogramar y eliminar reservas (solo si están canceladas).
+      </p>
+    </div>
+  </header>
+
+  <div class="card-panel">
+    <h2>Nueva reserva</h2>
+    <form method="post" class="form-grid">
+
+      {% if session.get('rol') == 'admin' %}
+      <div class="field">
+        <label>Cliente</label>
+        <select name="id_cliente" required>
+          {% for c in clientes %}
+            <option value="{{ c.id_cliente }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% else %}
+      <div class="field">
+        <label>Cliente</label>
+        <input value="{{ clientes[0].nombre }}" disabled>
+      </div>
+      {% endif %}
+
+      <div class="field">
+        <label>Habitación</label>
+        <select name="id_habitacion" required>
+          {% for h in habitaciones %}
+            <option value="{{ h.id_habitacion }}">{{ h.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Fecha ingreso</label>
+        <input type="date" name="fi" required>
+      </div>
+
+      <div class="field">
+        <label>Fecha salida</label>
+        <input type="date" name="ff" required>
+      </div>
+
+      <div class="actions">
+        <button class="btn">Crear (Pendiente)</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-panel">
+    <h2>Listado de reservas</h2>
+
+    {% if reservas|length == 0 %}
+      <div class="empty">
+        <div class="empty-emoji">🛎️</div>
+        <h3>No hay reservas registradas</h3>
+        <p class="muted">Crea una nueva reserva usando el formulario superior.</p>
+      </div>
+    {% else %}
+      <div class="table-wrap">
+        <table class="table table-reservas">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Hab.</th>
+              <th>Ingreso</th>
+              <th>Salida</th>
+              <th>Estado</th>
+              <th class="right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for r in reservas %}
+            <tr>
+              <td class="mono">{{ r.id_reserva }}</td>
+              <td><strong>{{ r.cliente }}</strong></td>
+              <td class="mono">{{ r.habitacion }}</td>
+              <td class="mono">{{ r.fecha_ingreso }}</td>
+              <td class="mono">{{ r.fecha_salida }}</td>
+              <td>
+                {% if r.estado == 'Confirmada' %}
+                  <span class="badge ok">Confirmada</span>
+                {% elif r.estado == 'Cancelada' %}
+                  <span class="badge warn">Cancelada</span>
+                {% else %}
+                  <span class="badge">Pendiente</span>
+                {% endif %}
+              </td>
+              <td class="right nowrap">
+
+                {% if session.get('rol') == 'admin' %}
+                <form method="post" action="{{ url_for('reservas_estado', rid=r.id_reserva) }}" class="inline">
+                  <input type="hidden" name="estado" value="Confirmada">
+                  <button class="btn">Confirmar</button>
+                </form>
+                {% endif %}
+
+                <form method="post" action="{{ url_for('reservas_estado', rid=r.id_reserva) }}" class="inline">
+                  <input type="hidden" name="estado" value="Cancelada">
+                  <button class="btn warn">Cancelar</button>
+                </form>
+
+                <form method="post" action="{{ url_for('reservas_eliminar', rid=r.id_reserva) }}" class="inline"
+                      onsubmit="return confirm('¿Eliminar la reserva #{{ r.id_reserva }}? Debe estar cancelada.');">
+                  <button class="btn danger">Eliminar</button>
+                </form>
+              </td>
+            </tr>
+            <tr class="subrow">
+              <td colspan="7">
+                <form method="post" action="{{ url_for('reservas_reprogramar', rid=r.id_reserva) }}" class="reprog">
+                  <label>Reprogramar:</label>
+                  <input type="date" name="fi" required>
+                  <span class="arrow">→</span>
+                  <input type="date" name="ff" required>
+                  <button class="btn ghost">Aplicar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

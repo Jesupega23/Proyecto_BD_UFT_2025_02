@@ -1,0 +1,69 @@
+{% extends "base.html" %}{% block content %}
+<section class="auth-page">
+  <div class="container auth-layout">
+
+    <div class="auth-intro">
+      <h1>Crea tu cuenta en Refugio Andino</h1>
+      <p class="muted">
+        Regístrate como huésped para reservar, revisar y gestionar tus estadías.
+      </p>
+    </div>
+
+    <div class="auth-card">
+      <h2>Crear cuenta</h2>
+
+      <form method="post">
+        <div class="field">
+          <label>Usuario</label>
+          <input name="username" placeholder="Ej: jlopez" required>
+        </div>
+
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" name="password" required>
+        </div>
+
+        <div class="field">
+          <label>Repetir contraseña</label>
+          <input type="password" name="password2" required>
+        </div>
+
+        <hr style="border:none; border-top:1px solid rgba(148,163,184,0.3); margin:1rem 0;">
+
+        <div class="field">
+          <label>Nombre</label>
+          <input name="nombre" placeholder="Ej: Juan" required>
+        </div>
+
+        <div class="field">
+          <label>Apellido</label>
+          <input name="apellido" placeholder="Ej: Pérez" required>
+        </div>
+
+        <div class="field">
+          <label>RUT</label>
+          <input name="rut" placeholder="12.345.678-9" required>
+        </div>
+
+        <div class="field">
+          <label>Teléfono</label>
+          <input name="telefono" placeholder="+56 9 1234 5678">
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="correo@dominio.com">
+        </div>
+
+        <button class="btn" style="width:100%; margin-top:0.7rem;">Crear cuenta</button>
+      </form>
+
+      <div class="muted small" style="margin-top:0.9rem; text-align:center;">
+        ¿Ya tienes cuenta?
+        <a class="link" href="{{ url_for('login') }}">Iniciar sesión</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

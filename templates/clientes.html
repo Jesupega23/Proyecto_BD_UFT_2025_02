@@ -1,0 +1,84 @@
+{% extends "base.html" %}{% block content %}
+<section class="container page">
+  <header class="page-head">
+    <div>
+      <h1>Clientes</h1>
+      <p class="muted">Gestiona el registro de huéspedes y búsquedas rápidas.</p>
+    </div>
+    <form class="search" method="get">
+      <input type="text" name="q" placeholder="Buscar por nombre, RUT o email…" value="{{ q or '' }}">
+      <button class="btn outline">Buscar</button>
+    </form>
+  </header>
+
+  <div class="card-panel">
+    {% if rows|length == 0 %}
+      <div class="empty">
+        <div class="empty-emoji">🗂️</div>
+        <h3>No hay clientes registrados</h3>
+        <p class="muted">Crea el primer huésped usando el formulario de abajo.</p>
+      </div>
+    {% else %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Nombre</th><th>RUT</th><th>Teléfono</th><th>Email</th><th class="right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for c in rows %}
+            <tr>
+              <td class="mono">{{ c.id_cliente }}</td>
+              <td><strong>{{ c.nombre }} {{ c.apellido }}</strong></td>
+              <td class="mono">{{ c.rut }}</td>
+              <td class="mono">{{ c.telefono }}</td>
+              <td>
+                {% if c.email %}
+                  <a class="link" href="mailto:{{ c.email }}">{{ c.email }}</a>
+                {% endif %}
+              </td>
+              <td class="right">
+                <form method="post" action="{{ url_for('clientes_borrar', cid=c.id_cliente) }}"
+                      onsubmit="return confirm('¿Eliminar cliente #{{ c.id_cliente }}? Solo si no tiene reservas activas.');">
+                  <button class="btn danger">Borrar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="card-panel">
+    <h2>Crear cliente</h2>
+    <form method="post" class="form-grid">
+      <div class="field">
+        <label>Nombre</label>
+        <input name="nombre" placeholder="Ej: Juan" required>
+      </div>
+      <div class="field">
+        <label>Apellido</label>
+        <input name="apellido" placeholder="Ej: Pérez" required>
+      </div>
+      <div class="field">
+        <label>RUT</label>
+        <input name="rut" placeholder="12.345.678-9" required>
+      </div>
+      <div class="field">
+        <label>Teléfono</label>
+        <input name="telefono" placeholder="+56 9 1234 5678">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input name="email" type="email" placeholder="correo@dominio.com">
+      </div>
+      <div class="actions">
+        <button class="btn">Guardar</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
